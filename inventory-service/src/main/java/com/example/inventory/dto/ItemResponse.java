@@ -19,7 +19,7 @@ public class ItemResponse {
         this.lastUpdated = lastUpdated;
     }
 
-    public ItemResponse() {
+    public ItemResponse(String id, String name, String description, Double itemQty, String addedBy, double price) {
     }
 
     public String getId() {

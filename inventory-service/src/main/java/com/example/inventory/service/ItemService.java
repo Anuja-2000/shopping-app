@@ -97,6 +97,18 @@ public class ItemService {
                  isQuantityEnough = false;
                  break;
              }
+             double itemQty = currentItem.getQuantity() - quantity;
+             updateItem(
+              new ItemResponse(
+                      currentItem.getId(),
+                      currentItem.getName(),
+                      currentItem.getDescription(),
+                      itemQty,
+                      currentItem.getPrice(),
+                      currentItem.getAddedBy(),
+                      currentItem.getLastUpdated()
+              )
+             );
          }
 
          return isQuantityEnough;
