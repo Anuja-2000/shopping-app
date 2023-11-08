@@ -92,7 +92,7 @@ public class ItemService {
 
         for (int index = 0; index < items.size(); index++) {
             Item currentItem = items.get(index);
-            Double quantity = qty.get(index);
+            double quantity = qty.get(index);
              if (currentItem.getQuantity() <= quantity) {
                  isQuantityEnough = false;
                  break;
