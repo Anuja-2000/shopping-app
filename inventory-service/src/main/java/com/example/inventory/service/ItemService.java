@@ -85,13 +85,15 @@ public class ItemService {
         return false;
     }
 
-    public boolean isInStock(List<String> id){
-         List<Item> items = itemRepository.findByIdIn(id);
+    public boolean isInStock(List<String> ids, List<Double> qty ){
+         List<Item> items = itemRepository.findByIdIn(ids);
         boolean isQuantityEnough = true;
 
 
-         for(Item i:items){
-             if (i.getQuantity() <= 0) {
+        for (int index = 0; index < items.size(); index++) {
+            Item currentItem = items.get(index);
+            Double quantity = qty.get(index);
+             if (currentItem.getQuantity() <= quantity) {
                  isQuantityEnough = false;
                  break;
              }
