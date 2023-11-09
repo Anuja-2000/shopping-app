@@ -1,13 +1,11 @@
-package com.example.user.model;
+package com.example.user.dto;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import com.example.user.model.Role;
 
 import java.util.Set;
 
-@Document
-public class User {
-    @Id
+public class UserRequest {
+
     private String id;
     private String name;
     private String email;
@@ -17,10 +15,7 @@ public class User {
     private Set<Role> roles;
     private String address;
 
-
-    // Constructors, getters, setters, etc.
-
-    public User(String id, String name, String email, String phoneNumber, String username, String password, Set<Role> roles, String address) {
+    public UserRequest(String id, String name, String email, String phoneNumber, String username, String password, Set<Role> roles, String address) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -29,6 +24,14 @@ public class User {
         this.password = password;
         this.roles = roles;
         this.address = address;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -55,22 +58,6 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -93,5 +80,13 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
