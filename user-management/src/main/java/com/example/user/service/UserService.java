@@ -25,21 +25,32 @@ public class UserService {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
-    public void signUp(UserRequest userRequest) {
-        if (userRequest != null) {
-            UUID id = UUID.randomUUID();
-            User user = new User(id.toString(),
-                    userRequest.getName(),
-                    userRequest.getEmail(),
-                    userRequest.getPhoneNumber(),
-                    userRequest.getUsername(),
-                    passwordEncoder.encode(userRequest.getPassword()),
-                    userRequest.getRoles(),
-                    userRequest.getAddress());
-
-            userRepository.save(user);
+    public String signUp(UserRequest userRequest) {
+        User user1 = userRepository.findByUsername(userRequest.getUsername());
+        if(user1==null){
+            mapAndSave(userRequest);
+            return "Signed up successfully!";
         }
+        else if(Objects.equals(user1.getUsername(), userRequest.getUsername())){
+            return "User is already there! Please logIn!";
+        }
+        else {
+            return "Invalid!";
+        }
+    }
 
+    public void mapAndSave(UserRequest userRequest){
+        UUID id = UUID.randomUUID();
+        User user = new User(id.toString(),
+                userRequest.getName(),
+                userRequest.getEmail(),
+                userRequest.getPhoneNumber(),
+                userRequest.getUsername(),
+                passwordEncoder.encode(userRequest.getPassword()),
+                userRequest.getRoles(),
+                userRequest.getAddress());
+
+        userRepository.save(user);
     }
 
     public boolean signIn(UserLoginRequest userLoginRequest) {

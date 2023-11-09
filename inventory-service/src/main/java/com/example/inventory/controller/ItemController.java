@@ -2,6 +2,7 @@ package com.example.inventory.controller;
 
 import com.example.inventory.dto.ItemRequest;
 import com.example.inventory.dto.ItemResponse;
+import com.example.inventory.dto.LineItemResponse;
 import com.example.inventory.model.Item;
 import com.example.inventory.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,16 +54,22 @@ public class ItemController {
         return itemService.updateItem(updatedItem);
     }
 
+    @PutMapping("/update-items")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public boolean updateItems(@RequestBody List<LineItemResponse> lineItemResponse) {
+        return itemService.updateItems(lineItemResponse);
+    }
+
     @DeleteMapping("/delete")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public boolean deleteItem(@PathVariable(value = "id") String id) {
         return itemService.deleteItem(id);
     }
 
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public boolean isInStock(@RequestParam List<String> ids, List<Double> qty){
-        return itemService.isInStock(ids,qty);
-    }
+//    @GetMapping
+//    @ResponseStatus(HttpStatus.OK)
+//    public boolean isInStock(@RequestParam List<String> ids, List<Double> qty){
+//        return itemService.isInStock(ids,qty);
+//    }
 }
 

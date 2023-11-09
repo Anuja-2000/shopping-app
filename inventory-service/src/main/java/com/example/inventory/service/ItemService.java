@@ -2,6 +2,7 @@ package com.example.inventory.service;
 
 import com.example.inventory.dto.ItemRequest;
 import com.example.inventory.dto.ItemResponse;
+import com.example.inventory.dto.LineItemResponse;
 import com.example.inventory.model.Item;
 import com.example.inventory.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,40 @@ public class ItemService {
         return null;
     }
 
+    public boolean updateItems(List<LineItemResponse> lineItemResponses) {
+
+        Item item = null;
+        boolean isEnough = true;
+        for (LineItemResponse lineItemResponse : lineItemResponses) {
+            item = itemRepository.findById(lineItemResponse.getId()).orElse(null);
+            assert item != null;
+            if (item.getQuantity() < lineItemResponse.getQuantity()) {
+                isEnough = false;
+                break;
+            }
+        }
+        if(isEnough){
+            for (LineItemResponse lineItemResponse : lineItemResponses) {
+                item = itemRepository.findById(lineItemResponse.getId()).orElse(null);
+                setValues(item, lineItemResponse.getQuantity());
+            }
+        }
+        return isEnough;
+    }
+
+    private void setValues(Item item, double orderedQty){
+        if (item != null) {
+            double updatedQty = (item.getQuantity()) - orderedQty;
+            item.setName(item.getName());
+            item.setDescription(item.getDescription());
+            item.setQuantity(updatedQty);
+            item.setPrice(item.getPrice());
+            item.setAddedBy(item.getAddedBy());
+            item.setLastUpdated( new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date()));
+            itemRepository.save(item);
+        }
+    }
+
     public boolean deleteItem(String id) {
         Item item = itemRepository.findById(id).orElse(null);
         if (item != null) {
@@ -85,32 +120,32 @@ public class ItemService {
         return false;
     }
 
-    public boolean isInStock(List<String> ids, List<Double> qty ){
-         List<Item> items = itemRepository.findByIdIn(ids);
-        boolean isQuantityEnough = true;
-
-
-        for (int index = 0; index < items.size(); index++) {
-            Item currentItem = items.get(index);
-            double quantity = qty.get(index);
-             if (currentItem.getQuantity() <= quantity) {
-                 isQuantityEnough = false;
-                 break;
-             }
-             double itemQty = currentItem.getQuantity() - quantity;
-             updateItem(
-              new ItemResponse(
-                      currentItem.getId(),
-                      currentItem.getName(),
-                      currentItem.getDescription(),
-                      itemQty,
-                      currentItem.getPrice(),
-                      currentItem.getAddedBy(),
-                      currentItem.getLastUpdated()
-              )
-             );
-         }
-
-         return isQuantityEnough;
-    }
+//    public boolean isInStock(List<String> ids, List<Double> qty ){
+//         List<Item> items = itemRepository.findByIdIn(ids);
+//        boolean isQuantityEnough = true;
+//
+//
+//        for (int index = 0; index < items.size(); index++) {
+//            Item currentItem = items.get(index);
+//            double quantity = qty.get(index);
+//             if (currentItem.getQuantity() <= quantity) {
+//                 isQuantityEnough = false;
+//                 break;
+//             }
+//             double itemQty = currentItem.getQuantity() - quantity;
+//             updateItem(
+//              new ItemResponse(
+//                      currentItem.getId(),
+//                      currentItem.getName(),
+//                      currentItem.getDescription(),
+//                      itemQty,
+//                      currentItem.getPrice(),
+//                      currentItem.getAddedBy(),
+//                      currentItem.getLastUpdated()
+//              )
+//             );
+//         }
+//
+//         return isQuantityEnough;
+//    }
 }

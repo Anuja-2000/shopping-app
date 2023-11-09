@@ -26,8 +26,8 @@ public class UserController {
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public void signUp(@RequestBody UserRequest userRequest) {
-        userService.signUp(userRequest);
+    public String signUp(@RequestBody UserRequest userRequest) {
+        return userService.signUp(userRequest);
     }
 
     @GetMapping("/signin")
