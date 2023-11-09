@@ -61,8 +61,8 @@ public class ItemController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public boolean isInStock(@RequestParam List<String> id){
-        return itemService.isInStock(id);
+    public boolean isInStock(@RequestParam List<String> ids, List<Double> qty){
+        return itemService.isInStock(ids,qty);
     }
 }
 
