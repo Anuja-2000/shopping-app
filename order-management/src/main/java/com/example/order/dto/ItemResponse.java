@@ -9,7 +9,7 @@ public class ItemResponse {
     private String addedBy;
     private String lastUpdated;
 
-    public ItemResponse(String id, String name, String description, double quantity, double price, String addedBy, String lastUpdated) {
+    public ItemResponse(String id, String name,String address, String description, double quantity, double price, String addedBy, String lastUpdated) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -18,6 +18,9 @@ public class ItemResponse {
         this.addedBy = addedBy;
         this.lastUpdated = lastUpdated;
     }
+
+
+
 
     public String getId() {
         return id;

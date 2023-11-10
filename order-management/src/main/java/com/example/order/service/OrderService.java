@@ -72,6 +72,7 @@ public class OrderService {
         OrderLineItems orderLineItems = new OrderLineItems();
         orderLineItems.setId(orderLineItemsDto.getId());
         orderLineItems.setName(orderLineItemsDto.getName());
+        orderLineItems.setAddress(orderLineItemsDto.getAddress());
         orderLineItems.setDescription(orderLineItemsDto.getDescription());
         orderLineItems.setQuantity(orderLineItemsDto.getQuantity());
         orderLineItems.setPrice(orderLineItemsDto.getPrice());
