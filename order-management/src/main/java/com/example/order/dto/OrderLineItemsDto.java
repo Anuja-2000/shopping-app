@@ -7,13 +7,15 @@ public class OrderLineItemsDto {
 
     private String id;
     private String name;
+    private String address;
     private String description;
     private double quantity;
     private double price;
 
-    public OrderLineItemsDto(@JsonProperty("id") String id,@JsonProperty("name")String name,@JsonProperty("description") String description,@JsonProperty("quantity") double quantity,@JsonProperty("price") double price) {
+    public OrderLineItemsDto(@JsonProperty("id") String id,@JsonProperty("name")String name,@JsonProperty("address")String address,@JsonProperty("description") String description,@JsonProperty("quantity") double quantity,@JsonProperty("price") double price) {
         this.id = id;
         this.name = name;
+        this.address = address;
         this.description = description;
         this.quantity = quantity;
         this.price = price;
@@ -23,7 +25,13 @@ public class OrderLineItemsDto {
 
     }
 
+    public String getAddress() {
+        return address;
+    }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public String getId() {
         return id;

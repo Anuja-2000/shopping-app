@@ -9,13 +9,15 @@ public class OrderLineItems {
     @Id
     private String id;
     private String name;
+    private String address;
     private String description;
     private double quantity;
     private double price;
 
-    public OrderLineItems(String id, String name, String description, double quantity, double price) {
+    public OrderLineItems(String id, String name,String address ,String description, double quantity, double price) {
         this.id = id;
         this.name = name;
+        this.address = address;
         this.description = description;
         this.quantity = quantity;
         this.price = price;
@@ -24,6 +26,15 @@ public class OrderLineItems {
     public OrderLineItems() {
 
     }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
 
     public String getId() {
         return id;
