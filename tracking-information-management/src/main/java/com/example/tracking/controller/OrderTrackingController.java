@@ -6,6 +6,8 @@ import com.example.tracking.service.OrderTrackingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/order-tracking")
 public class OrderTrackingController {
@@ -22,12 +24,12 @@ public class OrderTrackingController {
     }
 
     @GetMapping("/{orderId}")
-    public OrderTrackingResponse getOrderTrackingByOrderId(@PathVariable String orderId) {
+    public List<OrderTrackingResponse> getOrderTrackingByOrderId(@PathVariable String orderId) {
         return orderTrackingService.getOrderTrackingByOrderId(orderId);
     }
 
     @PostMapping("/update")
-    public OrderTrackingResponse updateState(@RequestBody OrderTrackingResponse updateState) {
+    public OrderTrackingResponse updateState(@RequestBody OrderTrackingRequest updateState) {
         return orderTrackingService.updateStatus(updateState.getOrderId(), updateState.getStatus());
     }
 

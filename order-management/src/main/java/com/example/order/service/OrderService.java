@@ -1,9 +1,7 @@
 package com.example.order.service;
 
-import com.example.order.dto.LineItemResponse;
-import com.example.order.dto.OrderLineItemsDto;
-import com.example.order.dto.OrderRequest;
-import com.example.order.dto.OrderResponse;
+import com.example.order.adapter.OrderAdapter;
+import com.example.order.dto.*;
 import com.example.order.model.Order;
 import com.example.order.model.OrderLineItems;
 import com.example.order.repository.OrderRepository;
@@ -24,12 +22,13 @@ public class OrderService {
     @Autowired
     public OrderService(OrderRepository OrderRepository, WebClient.Builder webClient) {
         this.OrderRepository = OrderRepository;
-        this.webClient = webClient.baseUrl("http://localhost:8082/api/item").build();
+        this.webClient = webClient.baseUrl("http://localhost:8081/api").build();
     }
 
 
     public String placeOrder(OrderRequest orderRequest) {
         Order order = new Order();
+        order.setCustomerId(orderRequest.getCustomerId());
         order.setOrderNumber(UUID.randomUUID().toString());
 
         List<OrderLineItems> orderLineItems = orderRequest.getOrderLineItemsDtoList()
@@ -40,11 +39,14 @@ public class OrderService {
         List<LineItemResponse> lineItemResponses = orderLineItems.stream()
                 .map(orderLineItem -> new LineItemResponse(orderLineItem.getId(), orderLineItem.getQuantity()))
                 .toList();
+
+
         boolean allProductsInStock= sendLineItemData(lineItemResponses);
 
 
         if(allProductsInStock){
             OrderRepository.save(order);
+            sendTrackingData(order);
             return "Order Placed successfully!";
         } else {
             return "Product is not in stock, please try again later";
@@ -52,9 +54,24 @@ public class OrderService {
 
 
     }
+
+    private void sendTrackingData(Order order) {
+        OrderTrackingRequest orderTrackingRequest = new OrderTrackingRequest(
+                order.getOrderNumber(),
+                "Order Placed",
+                order.getOrderLineItemsList().get(0).getAddress());
+
+        Boolean block = webClient.post()
+                .uri("/order-tracking")
+                .bodyValue(orderTrackingRequest)
+                .retrieve()
+                .bodyToMono(Boolean.class)
+                .block();
+    }
+
     public boolean sendLineItemData (List < LineItemResponse > lineItemResponses) {
          return Boolean.TRUE.equals(webClient.put()
-                 .uri("/update-items")
+                 .uri("/item/update-items")
                  .bodyValue(lineItemResponses)
                  .retrieve()
                  .bodyToMono(Boolean.class)
@@ -62,16 +79,12 @@ public class OrderService {
     }
 
     private OrderLineItems mapToOrderLineItems(OrderLineItemsDto orderLineItemsDto) {
-        OrderLineItems orderLineItems = new OrderLineItems();
-        orderLineItems.setId(orderLineItemsDto.getId());
-        orderLineItems.setName(orderLineItemsDto.getName());
-        orderLineItems.setAddress(orderLineItemsDto.getAddress());
-        orderLineItems.setDescription(orderLineItemsDto.getDescription());
-        orderLineItems.setQuantity(orderLineItemsDto.getQuantity());
-        orderLineItems.setPrice(orderLineItemsDto.getPrice());
 
-        return orderLineItems;
+        OrderAdapter orderAdapter = new OrderAdapter(orderLineItemsDto);
+        return orderAdapter.mapTomapToOrderLineItems();
     }
+
+
 
     private OrderResponse mapToOrderResponse (Order order){
         return new OrderResponse(

@@ -8,7 +8,9 @@ import com.example.tracking.repository.OrderTrackingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderTrackingService {
@@ -25,7 +27,7 @@ public class OrderTrackingService {
                 id.toString(),
                 orderTrackingRequest.getOrderId(),
                 orderTrackingRequest.getStatus(),
-                orderTrackingRequest.getStatus()
+                orderTrackingRequest.getLocation()
         );
         orderTrackingRepository.save(orderTracking);
     }
@@ -35,23 +37,26 @@ public class OrderTrackingService {
                 orderTracking.getId(),
                 orderTracking.getOrderId(),
                 orderTracking.getStatus(),
-                orderTracking.getStatus()
+                orderTracking.getLocation()
         );
     }
 
-    public OrderTrackingResponse getOrderTrackingByOrderId(String orderId) {
-        OrderTracking orderTracking = orderTrackingRepository.findByOrderId(orderId);
-        return mapToorderTrackingResponse(orderTracking);
+    public List<OrderTrackingResponse> getOrderTrackingByOrderId(String orderId) {
+        List<OrderTracking> orderTracking = orderTrackingRepository.findByOrderId(orderId);
+         return orderTracking.stream().map(this::mapToorderTrackingResponse).collect(Collectors.toList());
     }
 
     public OrderTrackingResponse updateStatus(String orderId, String status) {
-        OrderTracking orderTracking = orderTrackingRepository.findByOrderId(orderId);
-        orderTracking.setStatus(status);
-        orderTrackingRepository.save(orderTracking);
-        return mapToorderTrackingResponse(orderTracking);
+        List<OrderTracking> orderTracking = orderTrackingRepository.findByOrderId(orderId);
+        OrderTracking orderTracking1 = new OrderTracking(
+        UUID.randomUUID().toString(),
+        orderId,
+        status,
+        orderTracking.get(0).getLocation());
+        orderTrackingRepository.save(orderTracking1);
+        return mapToorderTrackingResponse(orderTracking1);
 
     }
 
-    // Implement other business logic as needed
 }
 

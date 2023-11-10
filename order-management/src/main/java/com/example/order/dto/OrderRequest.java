@@ -1,14 +1,16 @@
 package com.example.order.dto;
 
-import com.example.order.model.OrderLineItems;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
 public class OrderRequest {
+
+    private String customerId;
     private List<OrderLineItemsDto> orderLineItemsDtoList;
 
-    public OrderRequest(@JsonProperty("orderLineItemsDtoList") List<OrderLineItemsDto> orderLineItemsDtoList) {
+    public OrderRequest(@JsonProperty("customerId") String customerId, @JsonProperty("orderLineItemsDtoList") List<OrderLineItemsDto> orderLineItemsDtoList) {
+        this.customerId = customerId;
         this.orderLineItemsDtoList = orderLineItemsDtoList;
     }
 
@@ -18,5 +20,13 @@ public class OrderRequest {
 
     public void setOrderLineItemsDtoList(List<OrderLineItemsDto> orderLineItemsDtoList) {
         this.orderLineItemsDtoList = orderLineItemsDtoList;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 }
