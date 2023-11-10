@@ -50,7 +50,7 @@ public class ItemController {
 
     @PutMapping("/update")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Item updateItem(@RequestBody ItemResponse updatedItem) {
+    public ItemResponse updateItem(@RequestBody ItemResponse updatedItem) {
         return itemService.updateItem(updatedItem);
     }
 

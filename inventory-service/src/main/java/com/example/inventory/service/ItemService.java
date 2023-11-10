@@ -63,7 +63,7 @@ public class ItemService {
         );
     }
 
-    public Item updateItem(ItemResponse updatedItem) {
+    public ItemResponse updateItem(ItemResponse updatedItem) {
         Item item = itemRepository.findById(updatedItem.getId()).orElse(null);
         if (item != null) {
             item.setName(updatedItem.getName());
@@ -72,7 +72,8 @@ public class ItemService {
             item.setPrice(updatedItem.getPrice());
             item.setAddedBy(updatedItem.getAddedBy());
             item.setLastUpdated( new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date()));
-            return itemRepository.save(item);
+            itemRepository.save(item);
+            return mapToItemResponse(item);
         }
         return null;
     }
