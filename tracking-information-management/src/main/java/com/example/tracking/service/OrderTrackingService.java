@@ -8,6 +8,8 @@ import com.example.tracking.repository.OrderTrackingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,34 +29,37 @@ public class OrderTrackingService {
                 id.toString(),
                 orderTrackingRequest.getOrderId(),
                 orderTrackingRequest.getStatus(),
-                orderTrackingRequest.getLocation()
+                new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date()),
+                orderTrackingRequest.getDescription()
         );
         orderTrackingRepository.save(orderTracking);
     }
 
-    public OrderTrackingResponse mapToorderTrackingResponse(OrderTracking orderTracking){
+    public OrderTrackingResponse mapToorderTrackingResponse(OrderTracking orderTracking) {
         return new OrderTrackingResponse(
                 orderTracking.getId(),
                 orderTracking.getOrderId(),
                 orderTracking.getStatus(),
-                orderTracking.getLocation()
+                orderTracking.getTimeStamp(),
+                orderTracking.getDescription()
         );
     }
 
     public List<OrderTrackingResponse> getOrderTrackingByOrderId(String orderId) {
         List<OrderTracking> orderTracking = orderTrackingRepository.findByOrderId(orderId);
-         return orderTracking.stream().map(this::mapToorderTrackingResponse).collect(Collectors.toList());
+        return orderTracking.stream().map(this::mapToorderTrackingResponse).collect(Collectors.toList());
     }
 
-    public OrderTrackingResponse updateStatus(String orderId, String status) {
-        List<OrderTracking> orderTracking = orderTrackingRepository.findByOrderId(orderId);
-        OrderTracking orderTracking1 = new OrderTracking(
-        UUID.randomUUID().toString(),
-        orderId,
-        status,
-        orderTracking.get(0).getLocation());
-        orderTrackingRepository.save(orderTracking1);
-        return mapToorderTrackingResponse(orderTracking1);
+    public OrderTrackingResponse updateStatus(OrderTrackingRequest orderTrackingRequest) {
+//        List<OrderTracking> orderTracking = orderTrackingRepository.findByOrderId(orderTrackingRequest.getOrderId());
+        OrderTracking orderTracking = new OrderTracking(
+                UUID.randomUUID().toString(),
+                orderTrackingRequest.getOrderId(),
+                orderTrackingRequest.getStatus(),
+                new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date()),
+                orderTrackingRequest.getDescription());
+        orderTrackingRepository.save(orderTracking);
+        return mapToorderTrackingResponse(orderTracking);
 
     }
 

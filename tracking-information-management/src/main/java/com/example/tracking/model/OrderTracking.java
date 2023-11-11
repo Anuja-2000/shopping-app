@@ -9,18 +9,21 @@ public class OrderTracking {
     private String id;
     private String orderId;
     private String status;
-    private String location;
+
+    private String timeStamp;
+    private String description;
     // Other tracking-related fields, getters, and setters
 
 
     public OrderTracking() {
     }
 
-    public OrderTracking(String id, String orderId, String status, String location) {
+    public OrderTracking(String id, String orderId, String status, String timesStamp, String description) {
         this.id = id;
         this.orderId = orderId;
         this.status = status;
-        this.location = location;
+        this.timeStamp = timesStamp;
+        this.description = description;
     }
 
     public String getId() {
@@ -47,12 +50,20 @@ public class OrderTracking {
         this.status = status;
     }
 
-    public String getLocation() {
-        return location;
+    public String getDescription() {
+        return description;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }
 

@@ -15,7 +15,6 @@ public class OrderAdapter {
         OrderLineItems orderLineItems = new OrderLineItems(
                 orderLineItemsDto.getId(),
                 orderLineItemsDto.getName(),
-                orderLineItemsDto.getAddress(),
                 orderLineItemsDto.getDescription(),
                 orderLineItemsDto.getQuantity(),
                 orderLineItemsDto.getPrice()

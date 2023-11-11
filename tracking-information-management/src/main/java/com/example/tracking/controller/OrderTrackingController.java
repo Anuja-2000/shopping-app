@@ -29,8 +29,8 @@ public class OrderTrackingController {
     }
 
     @PostMapping("/update")
-    public OrderTrackingResponse updateState(@RequestBody OrderTrackingRequest updateState) {
-        return orderTrackingService.updateStatus(updateState.getOrderId(), updateState.getStatus());
+    public OrderTrackingResponse updateState(@RequestBody OrderTrackingRequest updatedState) {
+        return orderTrackingService.updateStatus(updatedState);
     }
 
 }

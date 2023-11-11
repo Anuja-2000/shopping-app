@@ -30,6 +30,8 @@ public class OrderService {
         Order order = new Order();
         order.setCustomerId(orderRequest.getCustomerId());
         order.setOrderNumber(UUID.randomUUID().toString());
+        order.setAddress(orderRequest.getAddress());
+        order.setPhoneNumber(orderRequest.getPhoneNumber());
 
         List<OrderLineItems> orderLineItems = orderRequest.getOrderLineItemsDtoList()
                 .stream()
@@ -41,10 +43,10 @@ public class OrderService {
                 .toList();
 
 
-        boolean allProductsInStock= sendLineItemData(lineItemResponses);
+        boolean allProductsInStock = sendLineItemData(lineItemResponses);
 
 
-        if(allProductsInStock){
+        if (allProductsInStock) {
             OrderRepository.save(order);
             sendTrackingData(order);
             return "Order Placed successfully!";
@@ -59,7 +61,8 @@ public class OrderService {
         OrderTrackingRequest orderTrackingRequest = new OrderTrackingRequest(
                 order.getOrderNumber(),
                 "Order Placed",
-                order.getOrderLineItemsList().get(0).getAddress());
+                "",
+                "Inital placement of order");
 
         Boolean block = webClient.post()
                 .uri("/order-tracking")
@@ -69,13 +72,13 @@ public class OrderService {
                 .block();
     }
 
-    public boolean sendLineItemData (List < LineItemResponse > lineItemResponses) {
-         return Boolean.TRUE.equals(webClient.put()
-                 .uri("/item/update-items")
-                 .bodyValue(lineItemResponses)
-                 .retrieve()
-                 .bodyToMono(Boolean.class)
-                 .block());
+    public boolean sendLineItemData(List<LineItemResponse> lineItemResponses) {
+        return Boolean.TRUE.equals(webClient.put()
+                .uri("/item/update-items")
+                .bodyValue(lineItemResponses)
+                .retrieve()
+                .bodyToMono(Boolean.class)
+                .block());
     }
 
     private OrderLineItems mapToOrderLineItems(OrderLineItemsDto orderLineItemsDto) {
@@ -85,15 +88,16 @@ public class OrderService {
     }
 
 
-
-    private OrderResponse mapToOrderResponse (Order order){
+    private OrderResponse mapToOrderResponse(Order order) {
         return new OrderResponse(
-          order.getOrderNumber(),
-          order.getOrderLineItemsList()
-        );
+                order.getOrderNumber(),
+                order.getOrderLineItemsList(),
+                order.getCustomerId(),
+                order.getAddress(),
+                order.getPhoneNumber());
     }
 
-    public List<OrderResponse> getAllItems(){
+    public List<OrderResponse> getAllItems() {
         List<Order> items = OrderRepository.findAll();
         return items.stream().map(this::mapToOrderResponse).toList();
     }

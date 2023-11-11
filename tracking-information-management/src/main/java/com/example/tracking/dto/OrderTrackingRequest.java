@@ -1,6 +1,5 @@
 package com.example.tracking.dto;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "order_tracking")
@@ -8,18 +7,20 @@ public class OrderTrackingRequest {
 
     private String orderId;
     private String status;
-    private String location;
+    private String timeStamp;
+    private String description;
     // Other tracking-related fields, getters, and setters
 
 
     public OrderTrackingRequest() {
     }
 
-    public OrderTrackingRequest(String orderId, String status, String location) {
+    public OrderTrackingRequest(String orderId, String status, String timeStamp, String description) {
 
         this.orderId = orderId;
         this.status = status;
-        this.location = location;
+        this.timeStamp = timeStamp;
+        this.description = description;
     }
 
 
@@ -39,12 +40,20 @@ public class OrderTrackingRequest {
         this.status = status;
     }
 
-    public String getLocation() {
-        return location;
+    public String getDescription() {
+        return description;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }
 

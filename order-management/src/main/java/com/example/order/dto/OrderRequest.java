@@ -9,6 +9,10 @@ public class OrderRequest {
     private String customerId;
     private List<OrderLineItemsDto> orderLineItemsDtoList;
 
+    private String address;
+
+    private String phoneNumber;
+
     public OrderRequest(@JsonProperty("customerId") String customerId, @JsonProperty("orderLineItemsDtoList") List<OrderLineItemsDto> orderLineItemsDtoList) {
         this.customerId = customerId;
         this.orderLineItemsDtoList = orderLineItemsDtoList;
@@ -28,5 +32,21 @@ public class OrderRequest {
 
     public void setCustomerId(String customerId) {
         this.customerId = customerId;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }
