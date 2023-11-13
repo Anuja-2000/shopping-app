@@ -3,6 +3,7 @@ package com.example.user.service;
 import com.example.user.dto.UserLoginRequest;
 import com.example.user.dto.UserRequest;
 import com.example.user.dto.UserResponse;
+import com.example.user.model.Role;
 import com.example.user.model.User;
 import com.example.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,13 +42,15 @@ public class UserService {
 
     public void mapAndSave(UserRequest userRequest){
         UUID id = UUID.randomUUID();
+        Set <Role> roles = new HashSet<Role>();
+        roles.add(new Role("1","Customer"));
         User user = new User(id.toString(),
                 userRequest.getName(),
                 userRequest.getEmail(),
                 userRequest.getPhoneNumber(),
                 userRequest.getUsername(),
                 passwordEncoder.encode(userRequest.getPassword()),
-                userRequest.getRoles(),
+                roles,
                 userRequest.getAddress());
 
         userRepository.save(user);
